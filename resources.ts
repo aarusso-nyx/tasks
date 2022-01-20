@@ -9,13 +9,23 @@ export type ResourceType = 'vessel' | 'port' | 'fence' | 'berth' | 'pilot' | 'ca
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
+export interface ResourceId {
+    rsrcId:    string;
+}
+
+export interface ResourceReq {
+    type:       ResourceType;
+    rsrcId:     string | null;
+    rsrcName?:  string;
+}
+
 export class Resource { 
     rsrcId:     string;
     rsrcName:   string;
-    status:     ResourceStatus;
+    status?:    ResourceStatus;
     type:       ResourceType;
 
-    resource:   any; 
+    resource?:  any; 
 
     constructor(type: ResourceType, rsrcName: string, data: any, status: ResourceStatus='idle', rsrcId?: string) {
         this.type = type;
@@ -67,12 +77,12 @@ export const Fence = ( name: string, fenceId: string ): Resource => {
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-const dbResources = [];
+const dbResources: Resource[] = [];
 
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-export const getResource = (rsrcId: string): Resource => {
+export const getResource = (rsrcId: string): (Resource | undefined) => {
     return dbResources.find(r => r.rsrcId === rsrcId);
 }
 

@@ -1,21 +1,21 @@
-import { TaskStatus, TaskType } from "./tasks";
-import { ResourceStatus, ResourceType, Resource } from "./resources";
+import { TaskType } from "./tasks";
+import { ResourceReq, ResourceId } from "./resources";
 
 ////////////////////////////////////////////////////////////////////////////////////
-const mmsi = 123456789;
+const mmsi = '123456789';
 const hours = 60*60*1000;
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 export interface Recipe { 
-    id: number;
+   recipeId: number;
 // QUERY
     reqType:     TaskType;
-    reqResource: Resource;
+    reqResource: ResourceId;
 
 // RECIPE
     type: TaskType;
-    rsrc: Resource;
+    rsrc: ResourceReq;
 
     dts: number;
     dtf: number;
@@ -26,63 +26,61 @@ export interface Recipe {
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-const recipes: Recipe[] = [
-    // Voyages
-    { 
-    id: 1,    
+const recipes: Recipe[] = [{ 
+   recipeId: 1,    
     reqType: 'charter',
-    reqResource: { type: 'vessel', id: mmsi },      // ou id: null, se o recipe for para qualquer mms
+    reqResource: { rsrcId: mmsi },      // oursrcId: null, se o recipe for para qualquer mms
 
-    type: 'Voyage', 
-    rsrc: { type: 'port', id: 'BRSUA', name: 'Porto de Suape' },  
+    type: 'voyage', 
+    rsrc: { type: 'port', rsrcId: 'BRSUA', rsrcName: 'Porto de Suape' },  
 
     dts:     0, 
     dtf:     36*hours,
     order: 0
     },
     { 
-    id: 2,    
+   recipeId: 2,    
     reqType: 'charter',
-    reqResource: { type: 'vessel', id: mmsi },
+    reqResource: { rsrcId: mmsi },
 
-    type: 'Voyage', 
-    rsrc: { type: 'port', id: 'BRSTS', name: 'Porto de Santos' },  
+    type: 'voyage', 
+    rsrc: { type: 'port',rsrcId: 'BRSTS', rsrcName: 'Porto de Santos' },  
 
     dts:     0, 
     dtf:     36*hours,
     order: 1
     },
     { 
-    id: 3,    
+   recipeId: 3,    
     reqType: 'charter',
-    reqResource: { type: 'vessel', id: mmsi },
+    reqResource: { rsrcId: mmsi },
 
-    type: 'Voyage', 
-    rsrc: { type: 'port', id: 'BRPNG', name: 'Porto de Paranaguá' },  
+    type: 'voyage', 
+    rsrc: { type: 'port',rsrcId: 'BRPNG', rsrcName: 'Porto de Paranaguá' },  
 
     dts:     80*hours, 
     dtf:     116*hours,
     order: 2
     },
     { 
-    id: 4,    
+   recipeId: 4,    
     reqType: 'charter',
-    reqResource: { type: 'vessel', id: mmsi },
+    reqResource: { rsrcId: mmsi },
 
-    type: 'Voyage', 
-    rsrc: { type: 'port', id: 'BRSTS', name: 'Porto de Santos' },  
+    type: 'voyage', 
+    rsrc: { type: 'port',rsrcId: 'BRSTS', rsrcName: 'Porto de Santos' },  
 
     dts:     140*hours, 
     dtf:     176*hours,
     order: 3
     },
     { 
-    id: 5,    
+   recipeId: 5,    
     reqType: 'charter',
-    reqResource: { type: 'vessel', id: mmsi },
+    reqResource: { rsrcId: mmsi },
 
-    type: 'Voyage', 
-    rsrc: { type: 'port', id: 'BRSUA', name: 'Porto de Suape' },  
+    type: 'voyage', 
+    rsrc: { type: 'port',rsrcId: 'BRSUA', rsrcName: 'Porto de Suape' },  
 
     dts:     200*hours, 
     dtf:     240*hours,
@@ -94,24 +92,24 @@ const recipes: Recipe[] = [
 // BR SUAPE
 
     { 
-        id: 6,    
+       recipeId: 6,    
         reqType: 'voyage',
-        reqResource: { type: 'port', id: 'BRSUA' }, 
+        reqResource: { rsrcId: 'BRSUA' },
     
         type: 'mooring', 
-        rsrc: { type: 'fence', id: 'fundeio_suape', name: 'Fundeio de Suape' },  
+        rsrc: { type: 'fence',rsrcId: 'fundeio_suape', rsrcName: 'Fundeio de Suape' },  
     
         dts:     36*hours, 
         dtf:     48*hours,
         order: 0
     },
     { 
-        id: 7,    
+       recipeId: 7,    
         reqType: 'voyage',
-        reqResource: { type: 'port', id: 'BRSUA' },
+        reqResource: { rsrcId: 'BRSUA' },
     
-        type: '`piloting`', 
-        rsrc: { type: 'pilot' }, // id = null : prático não alocado ainda 
+        type: 'piloting', 
+        rsrc: { type: 'pilot', rsrcId: null }, // id = null : prático não alocado ainda 
     
         dts:     48*hours, 
         dtf:     49*hours,
@@ -119,12 +117,12 @@ const recipes: Recipe[] = [
     },
 
     { 
-        id: 8,    
+       recipeId: 8,    
         reqType: 'voyage',
-        reqResource: { type: 'port', id: 'BRSUA' },
+        reqResource: { rsrcId: 'BRSUA' },
     
         type: 'docking', 
-        rsrc: { type: 'berth', id: 'BRSUA/PGL2A', name: 'PGL_2A' }, // id = null, berço não definido ainda 
+        rsrc: { type: 'berth', rsrcId: 'BRSUA/PGL2A', rsrcName: 'PGL_2A' }, // id = null, berço não definido ainda 
     
         dts:     49*hours, 
         dtf:     73*hours,
@@ -133,12 +131,12 @@ const recipes: Recipe[] = [
 
 
     { 
-        id: 9,    
+       recipeId: 9,    
         reqType: 'voyage',
-        reqResource: { type: 'port', id: 'BRSUA' },
+        reqResource: { rsrcId: 'BRSUA' },
     
         type: 'piloting', 
-        rsrc: { type: 'pilot' }, // id = null 
+        rsrc: { type: 'pilot', rsrcId: null }, // id = null 
     
         dts:     73*hours, 
         dtf:     74*hours,
@@ -149,24 +147,24 @@ const recipes: Recipe[] = [
 /// 
 
 { 
-    id: 10,    
+   recipeId: 10,    
     reqType: 'voyage',
-    reqResource: { type: 'port', id: 'BRSTS' }, 
+    reqResource: { rsrcId: 'BRSTS' },
 
     type: 'mooring', 
-    rsrc: { type: 'fence', id: 'fundeio_suape', name: 'Fundeio de Suape' },  
+    rsrc: { type: 'fence', rsrcId: 'fundeio_suape', rsrcName: 'Fundeio de Suape' },  
 
     dts:     36*hours, 
     dtf:     48*hours,
     order: 0
 },
 { 
-    id: 11,    
+   recipeId: 11,    
     reqType: 'voyage',
-    reqResource: { type: 'port', id: 'BRSTS' },
+    reqResource: { rsrcId: 'BRSTS' },
 
     type: 'piloting', 
-    rsrc: { type: 'pilot' }, // id = null : prático não alocado ainda 
+    rsrc: { type: 'pilot', rsrcId: null }, // id = null : prático não alocado ainda 
 
     dts:     48*hours, 
     dtf:     49*hours,
@@ -174,26 +172,24 @@ const recipes: Recipe[] = [
 },
 
 { 
-    id: 12,    
+   recipeId: 12,    
     reqType: 'voyage',
-    reqResource: { type: 'port', id: 'BRSTS' },
+    reqResource: { rsrcId: 'BRSTS' },
 
     type: 'docking', 
-    rsrc: { type: 'berth', id: 'BRSTS/TPS07', name: 'PGL_2A' }, // id = null, berço não definido ainda 
+    rsrc: { type: 'berth', rsrcId: 'BRSTS/TPS07', rsrcName: 'PGL_2A' }, // id = null, berço não definido ainda 
 
     dts:     49*hours, 
     dtf:     73*hours,
     order: 2
 },
-
-
 { 
-    id: 13,    
+   recipeId: 13,    
     reqType: 'voyage',
-    reqResource: { type: 'port', id: 'BRSTS' },
+    reqResource: { rsrcId: 'BRSTS' },
 
     type: 'piloting', 
-    rsrc: { type: 'pilot' }, // id = null 
+    rsrc: { type: 'pilot', rsrcId: null }, // id = null 
 
     dts:     73*hours, 
     dtf:     74*hours,
@@ -203,14 +199,10 @@ const recipes: Recipe[] = [
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-export const getRecipes = (type: TaskType, rsrc: Resource ): Recipe[] => {
-    // return recipes.filter(r => r.reqType === type )
-        // )
-                // .sort((a, b) => a.order - b.order);
-
-    return recipes;
-    return [];
-}
-
 // const tbRecipes = 'smartlps-recipes';
 // db.query(tbRecipes, { reqType: type, reqResource: rsrc }, { order: 'order' })
+export const getRecipes = (type: TaskType, rsrc: ResourceReq | null ): Recipe[] => {
+    const where = (r: Recipe) => (r.reqType === type) && (!rsrc || r.reqResource.rsrcId === rsrc.rsrcId);
+
+    return recipes.filter(where).sort((a, b) => a.order - b.order);
+}

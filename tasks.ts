@@ -1,8 +1,9 @@
 // import db from "../../backend/db";
 import { v4 as uuidv4 } from 'uuid';
 
-import { Resource, getResource } from "./resources";
+import { Resource, getResource, ResourceId, ResourceReq } from "./resources";
 import { Recipe, getRecipes } from "./recipes";
+import { Person } from "./person";
 
 ////////////////////////////////////////////////////////////////////////////////////
 export type TaskType = 'charter' | 'voyage' | 'docking' | 'mooring' | 'piloting' | 'operation';
@@ -14,26 +15,26 @@ export type TaskStatus = 'scheduled' | '...' | 'finished';
 export class Task { 
     taskId:     string;
     type:       TaskType;
-    rsrc:       Resource;
+    rsrc:       ResourceReq | null;
     status:     TaskStatus;
 
-    parent:     Task;
-    prev_:      Task;
-    next_:      Task;
-    subs_:      Task[];    
-    crew_:      Person[];
+    parent:     Task | null = null;
+    prev_:      Task | null = null;
+    next_:      Task | null = null;
+    subs_:      Task  [] = [];    
+    crew_:      Person[] = [];
 
     depth:      number;
     order:      number;
 
-    etf:        number;
-    ets:        number;
-    atf:        number;
-    ats:        number;
+    etf:        number = 0;
+    ets:        number = 0;
+    atf:        number | null = null;
+    ats:        number | null = null;
 
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
-    constructor(parent: Task | null, type: TaskType, rsrc: Resource | null, ets: number = 0, etf?: number) {
+    constructor(parent: Task | null, type: TaskType, rsrc: ResourceReq | null, ets: number = 0, etf: number = 0, order: number = 0) {
         // Instatiating
         this.taskId = uuidv4();
         this.status = 'scheduled';
@@ -41,7 +42,11 @@ export class Task {
         this.type = type;
         this.rsrc = rsrc;
         this.ets  = ets;
-        this.ets  = etf;
+        this.etf  = etf;
+
+        // Linking
+        this.crew_ = [];
+        this.subs_ = [];
 
         // Inserting this on TaskTree
         if ( this.parent ) {
