@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Resource, getResource, ResourceId, ResourceReq } from "./resources";
 import { Recipe, getRecipes } from "./recipes";
 import { Person } from "./person";
+import { Ticket } from './tickets';
 
 ////////////////////////////////////////////////////////////////////////////////////
 export type TaskType = 'charter' | 'voyage' | 'docking' | 'mooring' | 'piloting' | 'operation';
@@ -15,8 +16,10 @@ export type TaskStatus = 'scheduled' | '...' | 'finished';
 export class Task { 
     taskId:     string;
     type:       TaskType;
-    rsrc:       ResourceReq | null;
     status:     TaskStatus;
+
+    rsrc:       ResourceReq | null;
+    ticket:     Ticket;
 
     parent:     Task | null = null;
     prev_:      Task | null = null;
@@ -43,11 +46,11 @@ export class Task {
         this.rsrc = rsrc;
         this.ets  = ets;
         this.etf  = etf;
-
+        
         // Linking
         this.crew_ = [];
         this.subs_ = [];
-
+        
         // Inserting this on TaskTree
         if ( this.parent ) {
             this.depth = this.parent.depth + 1;
@@ -63,14 +66,17 @@ export class Task {
             this.depth = 0;
             this.order = 0;
         }
-
+        
+        // Emit Ticket 
+        this.ticket = new Ticket(this);
+        
         // Cook Recipes
         getRecipes(type, rsrc)
-            .forEach( (r: Recipe) => {
-                 new Task(this, r.type, r.rsrc, (this.ets + r.dts), (this.etf + r.dtf));
-            });
+        .forEach( (r: Recipe) => {
+            new Task(this, r.type, r.rsrc, (this.ets + r.dts), (this.etf + r.dtf));
+        });
     }
-
+    
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
@@ -108,7 +114,7 @@ export class Task {
             });
         }
     }
-    
+
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////

@@ -35,7 +35,15 @@ export class Resource {
         this.resource = data;
 
         dbResources.push(this);
-        console.log(`Resource ${this.rsrcId} created`);
+        this.log();
+    }
+    
+    log(): void {
+        const id   = this.rsrcId.padStart(24,' ');
+        const name = this.rsrcName.padEnd(12,' ');
+        const type = this.type.padStart  ( 6,' ');
+
+        console.log(`Resource ${name} => [${type}] (${id})`);
     }
 }
 
@@ -47,32 +55,32 @@ export const Vessel = ( name: string, mmsi: number ): Resource => {
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-export const Port = ( name: string, portId: string ): Resource => { 
+export const Port = ( name: string, portId?: string ): Resource => { 
     return new Resource('port', name, {}, 'idle', portId);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-export const Berth = ( name: string, berthId: string ): Resource => { 
-    return new Resource('berth', name, {}, 'idle', berthId.toString());
+export const Berth = ( name: string, berthId?: string ): Resource => { 
+    return new Resource('berth', name, {}, 'idle', berthId);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-export const Cargo = ( name: string, cargoId: string ): Resource => { 
-    return new Resource('cargo', name, {}, 'idle', cargoId.toString());
+export const Cargo = ( name: string, cargoId?: string ): Resource => { 
+    return new Resource('cargo', name, {}, 'idle', cargoId);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-export const Pilot = ( name: string, pilotId: string ): Resource => { 
-    return new Resource('pilot', name, {}, 'idle', pilotId.toString());
+export const Pilot = ( name: string, pilotId?: string ): Resource => { 
+    return new Resource('pilot', name, {}, 'idle', pilotId);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-export const Fence = ( name: string, fenceId: string ): Resource => { 
-    return new Resource('fence', name, {}, 'idle', fenceId.toString());
+export const Fence = ( name: string, fenceId?: string ): Resource => { 
+    return new Resource('fence', name, {}, 'idle', fenceId);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -82,8 +90,8 @@ const dbResources: Resource[] = [];
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-export const getResource = (rsrcId: string): (Resource | undefined) => {
-    return dbResources.find(r => r.rsrcId === rsrcId);
+export const getResource = (rsrcId?: string | null): (Resource | undefined) => {
+    return rsrcId ? dbResources.find(r => r.rsrcId === rsrcId) : undefined;
 }
 
 
