@@ -74,6 +74,43 @@ export class Task {
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
+    // Methods
+    print(recurse: boolean = false, verbose: boolean = false): void {
+        const hour = (ms: number): string => { 
+            const h = (ms/3600000);           
+            return h.toFixed(0)
+                    .toString()
+                    .padStart(2, '0')
+                    .padStart(3, ' ') + 'h';
+        }
+
+        const id = verbose ? this.taskId.padEnd(24,' ') : '';
+        const ts = hour(this.ets);
+        const tf = hour(this.etf);
+        const type = this.type.padEnd(8, ' ');
+
+        const rsrc = (width: number = 32) => {
+            const indent = ' '.repeat(this.depth * 3);
+            
+            const content = this.rsrc ? (this.rsrc.rsrcId 
+                                         ? this.rsrc.rsrcId 
+                                         : 'Resource Not Defined')
+                                      : 'Resource Not Requested';
+            
+            return (indent + content).padEnd(width, ' ');
+        } 
+        
+        console.log(`(${ts} -> ${tf}) => [ ${type }] ${rsrc(40)} | ${id}`);
+
+        if ( recurse ) {
+            this.subs.forEach( (t: Task) => {
+                t.print(recurse, verbose);
+            });
+        }
+    }
+    
+    ///////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
     engage(type: TaskType, rsrc: Resource): Person[] {
         return [];
